@@ -31,16 +31,50 @@ def send_single_email(
         template_to_use, {"email": template_vars, "config": config}
     )
 
-    if config.POSTMARK_API_KEY:
-        postmark = PostmarkClient(server_token=config.POSTMARK_API_KEY)
+    if config.POSTMARK_API_KEY or (config.SMTP_HOSTNAME and config.SMTP_PORT):
+
         try:
-            postmark.emails.send(
-                From=config.EMAIL_DEFAULT_FROM,
-                To=to_email,
-                Subject=subject,
-                HtmlBody=email_string,
-                ReplyTo=reply_to or config.EMAIL_DEFAULT_FROM,
-            )
+            if config.POSTMARK_API_KEY:
+
+              postmark = PostmarkClient(server_token=config.POSTMARK_API_KEY)
+              postmark.emails.send(
+                  From=config.EMAIL_DEFAULT_FROM,
+                  To=to_email,
+                  Subject=subject,
+                  HtmlBody=email_string,
+                  ReplyTo=reply_to or config.EMAIL_DEFAULT_FROM,
+              )
+            else:
+                   
+                from email.mime.multipart import MIMEMultipart
+                from email.mime.text import MIMEText                
+                from email.utils import make_msgid, formatdate
+                from smtplib import SMTP
+              
+                # Open a connection to the server 
+                smtp = SMTP(config.SMTP_HOSTNAME, port=config.SMTP_PORT)
+                smtp.ehlo()
+
+                if config.SMTP_USE_TLS:
+                    smtp.starttls()
+                    smtp.ehlo() # we need to repeat the ehlo after initializing encryption
+
+                if config.SMTP_USERNAME:
+                    smtp.login(config.SMTP_USERNAME, config.SMTP_PASSWORD)
+
+                msg = MIMEMultipart('alternative')
+
+                msg['Subject'] = str(subject)
+                msg['From'] = str(config.EMAIL_DEFAULT_FROM)
+                msg['To'] = str(to_email)
+
+                msg.attach(MIMEText(email_string, 'html'))
+                msg['Message-Id'] = make_msgid()
+                msg['Date'] = formatdate()
+
+                smtp.sendmail(config.EMAIL_DEFAULT_FROM, to_email, msg.as_string())
+                smtp.quit() # close the connection
+
         except ClientError as e:
             code = e.error_code
 
