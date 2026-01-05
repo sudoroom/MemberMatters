@@ -1,4 +1,3 @@
-version: "3"
 services:
   mm-postgres:
     image: postgres:15.3-alpine
@@ -26,11 +25,15 @@ services:
 
   # MemberMatters
   mm-webapp:
-    image: membermatters/membermatters
+    image: sudoroom/membermatters
+    build:
+      dockerfile: docker/Dockerfile
+      context: ..
     restart: always
+    env_file: .env
     environment:
       MM_ENV: "Production"
-      MM_SECRET_KEY: "CHANGE_ME"
+        # MM_SECRET_KEY: "replacedbyenvironmentvar"
       MM_USE_POSTGRES: True
       MM_REDIS_HOST: "redis://mm-redis:6379/0"
     ports:
@@ -46,7 +49,7 @@ services:
 
   # MemberMatters Celery Worker
   mm-celery-worker:
-    image: membermatters/membermatters
+    image: sudoroom/membermatters
     restart: always
     environment:
       MM_ENV: "Production"
@@ -59,7 +62,7 @@ services:
 
   # MemberMatters Celery Beat
   mm-celery-beat:
-    image: membermatters/membermatters
+    image: sudoroom/membermatters
     restart: always
     environment:
       MM_ENV: "Production"
