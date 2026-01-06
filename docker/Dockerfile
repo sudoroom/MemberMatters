@@ -6,7 +6,9 @@ LABEL description="Base Dockerfile for the MemberMatters software."
 VOLUME /usr/src/data/
 VOLUME /usr/src/logs/
 
-RUN mkdir -p /usr/src/app/frontend
+RUN touch /usr/src/logs/django.log
+
+RUN mkdir -p /usr/src/app/frontend && mkdir /usr/src/logs && mkdir /usr/src/data
 
 RUN apt-get update -y && apt-get install -y nginx curl daphne
 

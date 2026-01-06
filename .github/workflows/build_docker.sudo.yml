@@ -1,4 +1,4 @@
-name: Build Docker Image (On Dev Push)
+name: Build Docker Image (sudoroom branch)
 
 on:
   workflow_dispatch:
