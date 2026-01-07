@@ -25,7 +25,7 @@ services:
 
   # MemberMatters
   mm-webapp:
-    image: sudoroom/membermatters
+    image: ghcr.io/sudoroom/membermatters:sudo
     build:
       dockerfile: docker/Dockerfile
       context: ..
@@ -47,10 +47,15 @@ services:
       interval: 5s
       timeout: 5s
       retries: 15
+    volumes:
+      - /usr/app:/usr/app
+      - /etc/timezone:/etc/timezone:ro
+      - /etc/localtime:/etc/localtime:ro
+      - /usr/app/django.log:/usr/src/logs/django.log
 
   # MemberMatters Celery Worker
   mm-celery-worker:
-    image: sudoroom/membermatters
+    image: ghcr.io/sudoroom/membermatters:sudo
     restart: always
     environment:
       MM_ENV: "Production"
@@ -63,7 +68,7 @@ services:
 
   # MemberMatters Celery Beat
   mm-celery-beat:
-    image: sudoroom/membermatters
+    image: ghcr.io/sudoroom/membermatters:sudo
     restart: always
     environment:
       MM_ENV: "Production"
