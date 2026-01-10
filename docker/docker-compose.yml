@@ -6,8 +6,8 @@ services:
       - POSTGRES_USER=membermatters
       - POSTGRES_PASSWORD=membermatters
       - POSTGRES_DB=membermatters
-    ports:
-      - "5432:5432"
+    #ports:
+    #  - "5432:5432"
     volumes:
       - mm-postgres-volume:/var/lib/postgresql/data
     healthcheck:
@@ -30,7 +30,6 @@ services:
       dockerfile: docker/Dockerfile
       context: ..
     restart: always
-    env_file: .env
     environment:
       MM_TIME_ZONE: America/Los_Angeles
       MM_ENV: "Production"
@@ -52,6 +51,35 @@ services:
       - /etc/timezone:/etc/timezone:ro
       - /etc/localtime:/etc/localtime:ro
       - /usr/app/django.log:/usr/src/logs/django.log
+
+  mm-staging:
+    image: ghcr.io/sudoroom/membermatters:staging
+    build:
+      dockerfile: docker/Dockerfile
+      context: ..
+    restart: always
+    environment:
+      MM_TIME_ZONE: America/Los_Angeles
+      MM_ENV: "Production"
+      MM_USE_POSTGRES: True
+      POSTGRES_DB: staging
+      POSTGRES_USER: staging
+      POSTGRES_PASSWORD: staging
+      MM_REDIS_HOST: "redis://mm-redis:6379/1"
+    ports:
+      - "8001:8000"
+    depends_on:
+      - mm-postgres
+      - mm-redis
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000"]
+      interval: 5s
+      timeout: 5s
+      retries: 15
+    volumes:
+      - /etc/timezone:/etc/timezone:ro
+      - /etc/localtime:/etc/localtime:ro
+      - /usr/app/django-staging.log:/usr/src/logs/django.log
 
   # MemberMatters Celery Worker
   mm-celery-worker:
