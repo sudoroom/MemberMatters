@@ -30,7 +30,6 @@ class UserResource(resources.ModelResource):
         attribute="state",
         widget=ForeignKeyWidget(Profile, "state"),
     )
-
     stripe_customer_id = fields.Field(
         column_name="stripe_customer_id",
         attribute="stripe_customer_id",
@@ -83,6 +82,30 @@ class UserResource(resources.ModelResource):
             return user.profile.state
         except Exception:
             return "noob"
+
+    def dehydrate_stripe_customer_id(self, user):
+        try:
+            return user.profile.stripe_customer_id
+        except Exception:
+            return ""
+
+    def dehydrate_stripe_card_expiry(self, user):
+        try:
+            return user.profile.stripe_card_expiry
+        except Exception:
+            return ""
+
+    def dehydrate_stripe_payment_method_id(self, user):
+        try:
+            return user.profile.stripe_payment_method_id
+        except Exception:
+            return ""
+
+    def dehydrate_stripe_subscription_id(self, user):
+        try:
+            return user.profile.stripe_subscription_id
+        except Exception:
+            return ""
 
     def before_import_row(self, row, **kwargs):
         user, created = User.objects.get_or_create(
