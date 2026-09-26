@@ -31,6 +31,29 @@ class UserResource(resources.ModelResource):
         widget=ForeignKeyWidget(Profile, "state"),
     )
 
+    stripe_customer_id = fields.Field(
+        column_name="stripe_customer_id",
+        attribute="stripe_customer_id",
+        widget=ForeignKeyWidget(Profile, "stripe_customer_id"),
+    )
+    stripe_card_expiry = fields.Field(
+        column_name="stripe_card_expiry",
+        attribute="stripe_card_expiry",
+        widget=ForeignKeyWidget(Profile, "stripe_card_expiry"),
+    )
+
+    stripe_payment_method_id = fields.Field(
+        column_name="stripe_payment_method_id",
+        attribute="stripe_payment_method_id",
+        widget=ForeignKeyWidget(Profile, "stripe_payment_method_id"),
+    )
+
+    stripe_subscription_id = fields.Field(
+        column_name="stripe_subscription_id",
+        attribute="stripe_subscription_id",
+        widget=ForeignKeyWidget(Profile, "stripe_subscription_id"),
+    )
+
     def dehydrate_first_name(self, user):
         try:
             return user.profile.first_name
