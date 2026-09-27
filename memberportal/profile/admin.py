@@ -121,13 +121,25 @@ class UserResource(resources.ModelResource):
         # new User needs a Profile
         if created:
             # mandatory fields with profile
-            Profile.objects.create(
+            created_profile = Profile.objects.create(
                 user=user,
                 first_name=row["first_name"],
                 last_name=row["last_name"],
                 screen_name=row["screen_name"],
                 rfid=row["rfid"] or None,
             )
+            print(f"{created_profile=}")
+            created_profile.stripe_customer_id = "blar"
+            created_profile.stripe_card_expiry = "funky"
+            created_profile.stripe_payment_method = "whatev"
+            created_profile.stripe_subscription_id = "ahhasdhf"
+
+            print("after adding stripe")
+            print(f"{created_profile=}")
+            created_profile.stripe_customer_id = "blar"
+            # optional stripe data
+            # Profile.object.create(
+            # user=user
 
     def skip_row(self, instance, original, row, import_validation_errors):
         return row["email"] == "default@example.com"
@@ -143,6 +155,10 @@ class UserResource(resources.ModelResource):
             "last_name",
             "screen_name",
             "rfid",
+            "stripe_customer_id",
+            "stripe_card_expiry",
+            "stripe_payment_method",
+            "stripe_subscription_id",
         )
 
 
