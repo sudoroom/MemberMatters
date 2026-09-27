@@ -317,6 +317,8 @@ LOGGING = {
             "propagate": False,
         },
         "daphne": {"handlers": ["console", "file"], "level": "WARNING"},
+        "django.db.backends": {"level": "INFO", "handlers": ["console", "file"]},
+        "import_export": {"handlers": ["console", "file"], "level": "DEBUG"},
     },
 }
 
@@ -391,3 +393,6 @@ CELERY_BROKER_CONNECTION_RETRY_ON_STARTUP = True
 
 # Needed for testing OIDC on local development environment with ngrok (oauth requires HTTPS)
 # SITE_URL = "https://1bd0-122-148-148-138.ngrok-free.app"
+
+# Import_Export settings
+IMPORT_EXPORT_USE_TRANSACTIONS = True
