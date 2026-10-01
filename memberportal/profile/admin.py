@@ -120,6 +120,8 @@ class UserResource(resources.ModelResource):
 
         # new User needs a Profile
         if created:
+
+            print(f"created user: {user}")
             # mandatory fields with profile
             created_profile = Profile.objects.create(
                 user=user,
@@ -127,19 +129,20 @@ class UserResource(resources.ModelResource):
                 last_name=row["last_name"],
                 screen_name=row["screen_name"],
                 rfid=row["rfid"] or None,
+                # non-mandatory
+                stripe_customer_id=row["stripe_customer_id"] or None,
+                stripe_card_expiry=row["stripe_card_expiry"] or None,
+                stripe_payment_method_id=row["stripe_payment_method"] or None,
+                stripe_subscription_id=row["stripe_subscription_id"] or None,
             )
             print(f"{created_profile=}")
-            created_profile.stripe_customer_id = "blar"
-            created_profile.stripe_card_expiry = "funky"
-            created_profile.stripe_payment_method = "whatev"
-            created_profile.stripe_subscription_id = "ahhasdhf"
+            # created_profile.stripe_customer_id = row["stripe_customer_id"],
+            # created_profile.stripe_card_expiry = row["stripe_card_expiry"] or None,
+            # created_profile.stripe_payment_method_id = row["stripe_payment_method_id"],
+            # created_profile.stripe_subscription_id = row["stripe_subscription_id"],
 
             print("after adding stripe")
             print(f"{created_profile=}")
-            created_profile.stripe_customer_id = "blar"
-            # optional stripe data
-            # Profile.object.create(
-            # user=user
 
     def skip_row(self, instance, original, row, import_validation_errors):
         return row["email"] == "default@example.com"
@@ -157,7 +160,7 @@ class UserResource(resources.ModelResource):
             "rfid",
             "stripe_customer_id",
             "stripe_card_expiry",
-            "stripe_payment_method",
+            "stripe_payment_method_id",
             "stripe_subscription_id",
         )
 
