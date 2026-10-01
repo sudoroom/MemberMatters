@@ -117,7 +117,7 @@ class UserResource(resources.ModelResource):
         try:
             return user.profile.subscription_status
         except Exception:
-            return ""
+            return "inactive"
 
     def before_import_row(self, row, **kwargs):
 
@@ -147,7 +147,7 @@ class UserResource(resources.ModelResource):
                 stripe_card_expiry=row["stripe_card_expiry"] or None,
                 stripe_payment_method_id=row["stripe_payment_method"] or None,
                 stripe_subscription_id=row["stripe_subscription_id"] or None,
-                subscription_status=row["subscription_status"] or None,
+                subscription_status=row["subscription_status"] or "inactive",
             )
             print(f"{created_profile=}")
             print(f"{dir(created_profile)}")
