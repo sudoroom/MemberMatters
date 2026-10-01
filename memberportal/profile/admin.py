@@ -167,7 +167,7 @@ class UserResource(resources.ModelResource):
             "state",
             "stripe_customer_id",
             "stripe_card_expiry",
-            "stripe_payment_method",
+            "stripe_payment_method_id",
             "stripe_subscription_id",
             "subscription_status",
         )
