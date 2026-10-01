@@ -134,7 +134,6 @@ class UserResource(resources.ModelResource):
         print(f"{user=}, {created=}")
         # new User needs a Profile
         if created:
-            print(f"created user: {user}")
             # mandatory fields with profile
             created_profile = Profile.objects.create(
                 user=user,
@@ -143,20 +142,13 @@ class UserResource(resources.ModelResource):
                 screen_name=row["screen_name"],
                 rfid=row["rfid"] or None,
                 # non-mandatory
+                state=row["state"] or None,
                 stripe_customer_id=row["stripe_customer_id"] or None,
                 stripe_card_expiry=row["stripe_card_expiry"] or None,
-                stripe_payment_method_id=row["stripe_payment_method"] or None,
+                stripe_payment_method_id=row["stripe_payment_method_id"] or None,
                 stripe_subscription_id=row["stripe_subscription_id"] or None,
                 subscription_status=row["subscription_status"] or "inactive",
             )
-            print(f"{created_profile=}")
-            print(f"{dir(created_profile)}")
-            print(f"{vars(created_profile)}")
-            # created_profile.stripe_customer_id=row["stripe_customer_id"]
-            # created_profile.stripe_card_expiry=row["stripe_card_expiry"] or None
-            # created_profile.stripe_payment_method_id=row["stripe_payment_method"]
-            # created_profile.stripe_subscription_id=row["stripe_subscription_id"]
-            # created_profile.subscription_status=row["subscription_status"]
 
     def skip_row(self, instance, original, row, import_validation_errors):
         return row["email"] == "default@example.com"
@@ -172,9 +164,10 @@ class UserResource(resources.ModelResource):
             "last_name",
             "screen_name",
             "rfid",
+            "state",
             "stripe_customer_id",
             "stripe_card_expiry",
-            "stripe_payment_method_id",
+            "stripe_payment_method",
             "stripe_subscription_id",
             "subscription_status",
         )
