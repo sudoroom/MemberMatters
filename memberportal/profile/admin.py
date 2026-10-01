@@ -142,12 +142,17 @@ class UserResource(resources.ModelResource):
                 screen_name=row["screen_name"],
                 rfid=row["rfid"] or None,
                 # non-mandatory
+                # state is case Sensitive (Needs Induction, Active, Inactive, Account only)
                 state=row["state"] or None,
                 stripe_customer_id=row["stripe_customer_id"] or None,
                 stripe_card_expiry=row["stripe_card_expiry"] or None,
                 stripe_payment_method_id=row["stripe_payment_method_id"] or None,
                 stripe_subscription_id=row["stripe_subscription_id"] or None,
+                # subxcription status is case sensitive (Active, Inactive, Cancelling)
                 subscription_status=row["subscription_status"] or "inactive",
+            )
+            model.log_event(
+                description="updated subscription info", event_type="profile"
             )
 
     def skip_row(self, instance, original, row, import_validation_errors):
