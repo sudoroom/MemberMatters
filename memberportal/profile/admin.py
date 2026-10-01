@@ -151,9 +151,11 @@ class UserResource(resources.ModelResource):
                 # subxcription status is case sensitive (Active, Inactive, Cancelling)
                 subscription_status=row["subscription_status"] or "inactive",
             )
-            model.log_event(
-                description="updated subscription info", event_type="profile"
-            )
+            # created_profile.log_event(
+            # description="updated subscription info", event_type="profile"
+            # )
+
+            # created_profile.activate()
 
     def skip_row(self, instance, original, row, import_validation_errors):
         return row["email"] == "default@example.com"
