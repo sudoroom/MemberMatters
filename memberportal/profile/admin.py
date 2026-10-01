@@ -53,6 +53,12 @@ class UserResource(resources.ModelResource):
         widget=ForeignKeyWidget(Profile, "stripe_subscription_id"),
     )
 
+    subscription_status = fields.Field(
+        column_name="subscription_status",
+        attribute="subscription_status",
+        widget=ForeignKeyWidget(Profile, "subscription_status"),
+    )
+
     def dehydrate_first_name(self, user):
         try:
             return user.profile.first_name
@@ -107,7 +113,14 @@ class UserResource(resources.ModelResource):
         except Exception:
             return ""
 
+    def dehydrate_subscription_status(self, user):
+        try:
+            return user.profile.subscription_status
+        except Exception:
+            return ""
+
     def before_import_row(self, row, **kwargs):
+
         user, created = User.objects.get_or_create(
             email=row["email"],
             defaults={
@@ -118,9 +131,9 @@ class UserResource(resources.ModelResource):
             },
         )
 
+        print(f"{user=}, {created=}")
         # new User needs a Profile
         if created:
-
             print(f"created user: {user}")
             # mandatory fields with profile
             created_profile = Profile.objects.create(
@@ -134,15 +147,16 @@ class UserResource(resources.ModelResource):
                 stripe_card_expiry=row["stripe_card_expiry"] or None,
                 stripe_payment_method_id=row["stripe_payment_method"] or None,
                 stripe_subscription_id=row["stripe_subscription_id"] or None,
+                subscription_status=row["subscription_status"] or None,
             )
             print(f"{created_profile=}")
-            # created_profile.stripe_customer_id = row["stripe_customer_id"],
-            # created_profile.stripe_card_expiry = row["stripe_card_expiry"] or None,
-            # created_profile.stripe_payment_method_id = row["stripe_payment_method_id"],
-            # created_profile.stripe_subscription_id = row["stripe_subscription_id"],
-
-            print("after adding stripe")
-            print(f"{created_profile=}")
+            print(f"{dir(created_profile)}")
+            print(f"{vars(created_profile)}")
+            # created_profile.stripe_customer_id=row["stripe_customer_id"]
+            # created_profile.stripe_card_expiry=row["stripe_card_expiry"] or None
+            # created_profile.stripe_payment_method_id=row["stripe_payment_method"]
+            # created_profile.stripe_subscription_id=row["stripe_subscription_id"]
+            # created_profile.subscription_status=row["subscription_status"]
 
     def skip_row(self, instance, original, row, import_validation_errors):
         return row["email"] == "default@example.com"
@@ -162,6 +176,7 @@ class UserResource(resources.ModelResource):
             "stripe_card_expiry",
             "stripe_payment_method_id",
             "stripe_subscription_id",
+            "subscription_status",
         )
 
 
