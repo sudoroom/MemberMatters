@@ -53,12 +53,6 @@ class UserResource(resources.ModelResource):
         widget=ForeignKeyWidget(Profile, "stripe_subscription_id"),
     )
 
-    subscription_status = fields.Field(
-        column_name="subscription_status",
-        attribute="subscription_status",
-        widget=ForeignKeyWidget(Profile, "subscription_status"),
-    )
-
     def dehydrate_first_name(self, user):
         try:
             return user.profile.first_name
@@ -143,20 +137,14 @@ class UserResource(resources.ModelResource):
                 rfid=row["rfid"] or None,
                 # non-mandatory
                 # state is case Sensitive (Needs Induction, Active, Inactive, Account only)
-                state=row["state"] or None,
+                state=row["state"] or "Active",
                 stripe_customer_id=row["stripe_customer_id"] or None,
                 stripe_card_expiry=row["stripe_card_expiry"] or None,
                 stripe_payment_method_id=row["stripe_payment_method_id"] or None,
                 stripe_subscription_id=row["stripe_subscription_id"] or None,
                 # subxcription status is case sensitive (Active, Inactive, Cancelling)
-                subscription_status=row["subscription_status"] or "inactive",
             )
             print(f"new profile info for user: {user}")
-            # created_profile.log_event(
-            # description="updated subscription info", event_type="profile"
-            # )
-
-            # created_profile.activate()
 
     def skip_row(self, instance, original, row, import_validation_errors):
         return row["email"] == "default@example.com"
@@ -177,7 +165,6 @@ class UserResource(resources.ModelResource):
             "stripe_card_expiry",
             "stripe_payment_method_id",
             "stripe_subscription_id",
-            "subscription_status",
         )
 
 
