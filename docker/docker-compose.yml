@@ -9,12 +9,21 @@ services:
     #ports:
     #  - "5432:5432"
     volumes:
-      - mm-postgres-volume:/var/lib/postgresql/data
+      #- mm-postgres-volume:/var/lib/postgresql/data
+      - /opt/member-matters/postgres/data:/var/lib/postgresql/data
+      - /opt/member-matters/postgres/wal_archive:/var/lib/postgresql/wal_archive
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U membermatters"]
       interval: 5s
       timeout: 5s
       retries: 5
+    command: >
+      postgres
+      -c archive_mode=on
+      -c archive_command='test ! -f /var/lib/postgresql/wal_archive/%f && cp %p /var/lib/postgresql/wal_archive/%f'
+      -c wal_level=replica
+      -c max_wal_senders=5
+      -c wal_keep_size=64
 
   # MemberMatters Redis
   mm-redis:
