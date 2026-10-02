@@ -136,13 +136,12 @@ class UserResource(resources.ModelResource):
                 screen_name=row["screen_name"],
                 rfid=row["rfid"] or None,
                 # non-mandatory
-                # state is case Sensitive (Needs Induction, Active, Inactive, Account only)
-                state=row["state"] or "Active",
+                # state is case Sensitive (noob, active, inactive, account_only)
+                state=row["state"] or "active",
                 stripe_customer_id=row["stripe_customer_id"] or None,
                 stripe_card_expiry=row["stripe_card_expiry"] or None,
                 stripe_payment_method_id=row["stripe_payment_method_id"] or None,
                 stripe_subscription_id=row["stripe_subscription_id"] or None,
-                # subxcription status is case sensitive (Active, Inactive, Cancelling)
             )
             print(f"new profile info for user: {user}")
 
