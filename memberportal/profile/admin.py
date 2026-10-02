@@ -120,7 +120,7 @@ class UserResource(resources.ModelResource):
             return "inactive"
 
     def before_import_row(self, row, **kwargs):
-
+        print(f"Will be importing row - {row=}")
         user, created = User.objects.get_or_create(
             email=row["email"],
             defaults={
@@ -151,6 +151,7 @@ class UserResource(resources.ModelResource):
                 # subxcription status is case sensitive (Active, Inactive, Cancelling)
                 subscription_status=row["subscription_status"] or "inactive",
             )
+            print(f"new profile info for user: {user}")
             # created_profile.log_event(
             # description="updated subscription info", event_type="profile"
             # )
