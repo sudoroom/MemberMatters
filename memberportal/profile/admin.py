@@ -126,8 +126,8 @@ class UserResource(resources.ModelResource):
             defaults={
                 "email": row["email"],
                 "email_verified": True,
-                "admin": row["admin"],
-                "staff": row["staff"],
+                "admin": row["admin"] or False,
+                "staff": row["staff"] or False,
             },
         )
 
@@ -137,8 +137,8 @@ class UserResource(resources.ModelResource):
             # mandatory fields with profile
             created_profile = Profile.objects.create(
                 user=user,
-                first_name=row["first_name"],
-                last_name=row["last_name"],
+                first_name=row["first_name"] or "firstname",
+                last_name=row["last_name"] or "lastname",
                 screen_name=row["screen_name"],
                 rfid=row["rfid"] or None,
                 # non-mandatory
