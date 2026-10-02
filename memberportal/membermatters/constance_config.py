@@ -269,11 +269,7 @@ CONSTANCE_CONFIG = {
         "",
         "The hostname for the SMTP server if not using Postmark.",
     ),
-    "SMTP_PORT": (
-        587, 
-        "The port for the SMTP server", 
-        int
-    ),
+    "SMTP_PORT": (587, "The port for the SMTP server", int),
     "SMTP_USE_TLS": (
         True,
         "Whether to use TLS to connect to the SMTP server",
@@ -461,7 +457,7 @@ CONSTANCE_CONFIG_FIELDSETS = OrderedDict(
         ),
         ("Postmark (EMAIL) Integration", ("POSTMARK_API_KEY",)),
         (
-            "SMTP Server (EMAIL) Integration", 
+            "SMTP Server (EMAIL) Integration",
             (
                 "SMTP_HOSTNAME",
                 "SMTP_PORT",
@@ -469,7 +465,7 @@ CONSTANCE_CONFIG_FIELDSETS = OrderedDict(
                 "SMTP_USERNAME",
                 "SMTP_PASSWORD",
             ),
-        ),                
+        ),
         (
             "Twilio (SMS) Integration",
             (
