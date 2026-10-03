@@ -320,27 +320,6 @@ CONSTANCE_CONFIG = {
         "",
         "Enter a Sentry DSN to enable sentry logging of backend errors. Leave blank to disable.",
     ),
-    "SMTP_HOSTNAME": (
-        "",
-        "The hostname for the SMTP server if not using Postmark.",
-    ),
-    "SMTP_PORT": (
-        587, 
-        "The port for the SMTP server", 
-        int
-    ),
-    "SMTP_USE_TLS": (
-        True,
-        "Whether to use TLS to connect to the SMTP server",
-    ),
-    "SMTP_USERNAME": (
-        "",
-        "Username for the SMTP server (if any)",
-    ),
-    "SMTP_PASSWORD": (
-        "",
-        "Password for the SMTP server (if any)",
-    ),
     # Induction
     "MOODLE_INDUCTION_ENABLED": (
         False,
@@ -496,6 +475,26 @@ CONSTANCE_CONFIG = {
         "",
         "The auth token (not an api token) to use for the twilio integration.",
     ),
+    "ENABLE_SLACK_INTEGRATION": (
+        False,
+        "Enable posting a notification to the slack channel on a card swipe.",
+    ),
+    "SLACK_DOOR_WEBHOOK": (
+        "https://hooks.slack.com/services/T00000000/B00000000/<token>",
+        "Slack URL to send webhook notifications to.",
+    ),
+    "SLACK_INTERLOCK_WEBHOOK": (
+        "https://hooks.slack.com/services/T00000000/B00000000/<token>",
+        "Slack URL to send webhook notifications to.",
+    ),
+    "SLACK_MEMBERBUCKS_PURCHASE_WEBHOOK": (
+        "https://hooks.slack.com/services/T00000000/B00000000/<token>",
+        "Slack URL to send webhook notifications to for vending/memberbucks purchases.",
+    ),
+    "SLACK_REPORT_ISSUE_WEBHOOK": (
+        "https://hooks.slack.com/services/T00000000/B00000000/<token>",
+        "Slack URL to send webhook notifications to when reporting issues.",
+    ),
     "SMS_ENABLE": (
         False,
         "If SMS functionality should be enabled (please configure below).",
@@ -594,6 +593,7 @@ CONSTANCE_CONFIG_FIELDSETS = OrderedDict(
                 "ENABLE_MEMBERBUCKS",
                 "ENABLE_DISCOURSE_SSO_PROTOCOL",
                 "ENABLE_DISCORD_INTEGRATION",
+                "ENABLE_SLACK_INTEGRATION",
                 "ENABLE_SPACE_DIRECTORY",
                 "ENABLE_THEME_SWIPE",
                 "ENABLE_PORTAL_SITE_SIGN_IN",
@@ -664,16 +664,6 @@ CONSTANCE_CONFIG_FIELDSETS = OrderedDict(
                 "EMAIL_BACKEND_OPTIONS",
             ),
         ),
-        (
-            "SMTP Server (EMAIL) Integration", 
-            (
-                "SMTP_HOSTNAME",
-                "SMTP_PORT",
-                "SMTP_USE_TLS",
-                "SMTP_USERNAME",
-                "SMTP_PASSWORD",
-            ),
-        ),                
         (
             "Twilio (SMS) Integration",
             (
