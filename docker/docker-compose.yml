@@ -73,7 +73,7 @@ services:
       - mm-postgres
       - mm-redis
     healthcheck:
-      test: ["CMD", "python", "manage.py", "health_check", "health_check-node", "mm-webapp:8000"]
+      test: ["CMD", "python", "manage.py", "health_check", "health_check-node", "mm-staging:8000"]
       interval: 30s
       timeout: 10s
     volumes:
