@@ -53,6 +53,6 @@ jobs:
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           script: |
             cd ~/MemberMatters-sudoroom/docker
-            docker compose pull ${{ env.IMAGE_NAME }}:staging
+            docker compose pull ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:staging
             docker compose up -d mm-staging
             docker image prune -a -f
