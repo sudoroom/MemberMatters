@@ -53,6 +53,11 @@ jobs:
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           script: |
             cd ~/MemberMatters-sudoroom/docker
+<<<<<<< HEAD
             docker pull ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:staging
+||||||| 1686c42c (Remove SudoRoom-specific changes)
+=======
+            docker compose pull ${{ env.IMAGE_NAME }}:staging
+>>>>>>> parent of 1686c42c (Remove SudoRoom-specific changes)
             docker compose up -d mm-staging
             docker image prune -a -f
