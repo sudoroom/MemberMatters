@@ -54,6 +54,5 @@ jobs:
           script: |
             cd ~/MemberMatters-sudoroom/docker
             docker pull ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:staging
-            docker compose pull ${{ env.IMAGE_NAME }}:staging
             docker compose up -d mm-staging
             docker image prune -a -f
